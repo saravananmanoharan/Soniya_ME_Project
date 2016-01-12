@@ -1,8 +1,6 @@
 import java.awt.EventQueue;
-import java.util.Properties;
 import org.opencv.core.Core;
 import com.soniya.common.utils.PropertyValuesFinder;
-import com.soniya.gui.DisplayWindow;
 import com.soniya.gui.DisplayWindow2;
 
 /**
