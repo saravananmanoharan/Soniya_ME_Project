@@ -1,7 +1,7 @@
 import java.awt.EventQueue;
-
+import java.util.Properties;
 import org.opencv.core.Core;
-
+import com.soniya.common.utils.PropertyValuesFinder;
 import com.soniya.gui.DisplayWindow;
 import com.soniya.gui.DisplayWindow2;
 
@@ -12,24 +12,27 @@ import com.soniya.gui.DisplayWindow2;
  * @since
  * @author sony
  * @see
- *
  */
 public class Main {
 
-	static{
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-	}
-	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					DisplayWindow2 frame = new DisplayWindow2("Original Image", 400, 500);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+
+            public void run() {
+                try {
+                    PropertyValuesFinder propertyValuesFinder = PropertyValuesFinder.getInstance();
+                    DisplayWindow2 frame = new DisplayWindow2(propertyValuesFinder.getStringValues("MainFrameName")
+                                                              , propertyValuesFinder.getIntValues("MainFrameWidth")
+                                                              , propertyValuesFinder.getIntValues("MainFramHeight"));
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }

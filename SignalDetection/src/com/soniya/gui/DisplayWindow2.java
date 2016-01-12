@@ -13,15 +13,16 @@ public class DisplayWindow2 extends JFrame {
 
 	private JPanel contentPane;
 
-	public DisplayWindow2(String title, int width, int height) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-          setBounds(100, 100, 650, 490);
-          contentPane = new JPanel();
-          contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-          setContentPane(contentPane);
-          contentPane.setLayout(null);
-          new ImageCaptureThread(this).start();
-	}
+    public DisplayWindow2(String title, int width, int height) {
+        setTitle(title);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 650, 490);
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
+        new ImageCaptureThread(this).start();
+    }
 
 	/*private void createFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
