@@ -3,7 +3,6 @@ package com.soniya.gui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 import com.soniya.captureVideo.CaptureVideo;
 
 public class DisplayWindow2 extends JFrame {
@@ -15,10 +14,16 @@ public class DisplayWindow2 extends JFrame {
 	private JPanel contentPane;
 
 	public DisplayWindow2(String title, int width, int height) {
-		createFrame();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+          setBounds(100, 100, 650, 490);
+          contentPane = new JPanel();
+          contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+          setContentPane(contentPane);
+          contentPane.setLayout(null);
+          new ImageCaptureThread(this).start();
 	}
 
-	private void createFrame() {
+	/*private void createFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 650, 490);
 		contentPane = new JPanel();
@@ -26,7 +31,7 @@ public class DisplayWindow2 extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		new ImageCaptureThread(this).start();
-	}
+	}*/
 
 	CaptureVideo videoCap = new CaptureVideo();
 

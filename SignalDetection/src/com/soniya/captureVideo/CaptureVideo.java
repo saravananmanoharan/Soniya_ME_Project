@@ -14,8 +14,13 @@ public class CaptureVideo {
 	Mat2Image mat2Img = new Mat2Image();
 
 	public CaptureVideo() {
-		cap = new VideoCapture();
-		cap.open(0);
+		try {
+        cap = new VideoCapture();
+        cap.open(0);
+    } catch (Exception e) {
+        System.out.println("Unable to Connect to Camera!");
+        System.exit(-1);
+    }
 	}
 
 	public BufferedImage getOneFrame() {
