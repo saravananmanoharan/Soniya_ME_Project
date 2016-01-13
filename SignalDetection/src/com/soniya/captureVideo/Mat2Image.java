@@ -1,32 +1,46 @@
 package com.soniya.captureVideo;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
+import com.soniya.utils.common.PropertyValuesFinder;
+import com.soniya.utils.image.EdgeDetectorAlgo;
+import com.soniya.utils.image.ImageUtils;
 
 public class Mat2Image {
 
     Mat mat = new Mat();
     BufferedImage img;
     byte[] dat;
+    int w = 0;
+    int h = 0;
+    PropertyValuesFinder propertyValuesFinder = PropertyValuesFinder.getInstance();
 
     public Mat2Image() {
     }
 
     public Mat2Image(Mat mat) {
-        getSpace(mat);
+        //getSpace(mat);
     }
 
     public void getSpace(Mat mat) {
-        this.mat = mat;
-        int w = 650;
-        int h = 490;
         if (mat.cols() > 0 & mat.rows() > 0) {
-            w = mat.cols();
-            h = mat.rows();
+            this.w = mat.cols();
+            this.h = mat.rows();
         }
 
         if (dat == null || dat.length != w * h * 3) {
             dat = new byte[w * h * 3];
+        	//dat = new byte[w * h];
         }
 
         if (img == null || img.getWidth() != w || img.getHeight() != h || img.getType() != BufferedImage.TYPE_3BYTE_BGR) {
@@ -34,11 +48,49 @@ public class Mat2Image {
         }
     }
 
-    BufferedImage getImage(Mat mat) {
-        VideoSize.getInstance().setVideoSize(mat.cols(), mat.rows());
-        getSpace(mat);
-        mat.get(0, 0, dat);
-        img.getRaster().setDataElements(0, 0, mat.cols(), mat.rows(), dat);
-        return img;
+    BufferedImage getImage(Mat mat) throws IOException {
+    	this.mat = mat;
+        return processImage();
     }
+
+	private BufferedImage processImage() {
+/*		Mat src = new Mat(mat.rows(),mat.cols(), CvType.CV_8UC3);
+    	Mat grey = new Mat(mat.rows(),mat.cols(), CvType.CV_8UC3);
+    	Mat bw = new Mat(mat.rows(),mat.cols(), CvType.CV_8UC3);
+    	Mat dest = new Mat(mat.rows(),mat.cols(), CvType.CV_8UC3);
+*/
+		Mat src = new Mat();
+    	Mat gray = new Mat(mat.height(),mat.width(),CvType.CV_8UC3);
+    	Mat bw = new Mat();
+    	Mat dest = new Mat();
+
+    	Imgproc.cvtColor(mat, gray, Imgproc.COLOR_RGB2XYZ);
+    	//gray = ImageUtils.convert2GrayScale(mat);
+    	Imgproc.blur(gray, bw, new Size(5,5));
+    	Imgproc.Canny(gray, bw, 80, 240);
+    	//Imgproc.Canny(grey, bw, 80, 80);
+    	/*EdgeDetectorAlgo edgeDetectorAlgo = new EdgeDetectorAlgo(mat);
+    	dest = edgeDetectorAlgo.detectEdge();*/
+      
+    	/**
+    	 * find the contours
+    	 * 
+    	 */
+    	/*List<MatOfPoint> contours = new ArrayList<>();
+    	Mat hierarchy = new Mat();
+    	Imgproc.findContours(bw.clone(), contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);*/
+    	//mat.copyTo(dest);
+    	
+    	//getSpace(dest);
+    	
+    	//byte[] dat = new byte[bw.rows() * bw.cols() * (int) (bw.elemSize())];
+    	byte[] dat = new byte[bw.rows() * bw.cols() * 3 ];
+    	
+    	bw.get(0, 0, dat);
+        //img.getRaster().setDataElements(0, 0, dest.width(), dest.height(), dat);
+		 
+		BufferedImage image = new BufferedImage(bw.cols(), bw.rows(), BufferedImage.TYPE_3BYTE_BGR);;
+        image.getRaster().setDataElements(0, 0, bw.cols(), bw.rows(), dat);
+        return image;
+	}
 }

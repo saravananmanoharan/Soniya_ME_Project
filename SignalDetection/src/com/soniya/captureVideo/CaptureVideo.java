@@ -3,6 +3,7 @@ package com.soniya.captureVideo;
 import com.soniya.captureVideo.Mat2Image;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import org.opencv.videoio.*;
 
@@ -23,7 +24,7 @@ public class CaptureVideo {
     }
 	}
 
-	public BufferedImage getOneFrame() {
+	public BufferedImage getOneFrame() throws IOException {
 		cap.read(mat2Img.mat);
 		return mat2Img.getImage(mat2Img.mat);
 	}

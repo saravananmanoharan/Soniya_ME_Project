@@ -11,8 +11,11 @@ import java.awt.event.WindowEvent;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
+import com.soniya.captureVideo.CaptureVideo;
 import com.soniya.gui.component.StatusBar;
+
 import java.awt.Window.Type;
+import java.io.IOException;
 
 public class DisplayWindow extends JFrame {
 	/**
@@ -53,9 +56,15 @@ public class DisplayWindow extends JFrame {
 	public void setStatusBarMessage(String message) {
 		statusBar.setMessage(message);
 	}
+	CaptureVideo videoCap = new CaptureVideo();
 	
 	public void paint(Graphics g){
 		g = frame.getContentPane().getGraphics();
-		g.drawLine(0, 0, width, height);
+		try {
+			g.drawImage(videoCap.getOneFrame(), 0, 0, this);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

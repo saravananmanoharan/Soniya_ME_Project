@@ -1,4 +1,4 @@
-package com.soniya.common.utils;
+package com.soniya.utils.common;
 
 import java.io.File;
 import java.io.FileInputStream;
