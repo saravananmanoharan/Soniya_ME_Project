@@ -60,37 +60,47 @@ public class Mat2Image {
     	Mat dest = new Mat(mat.rows(),mat.cols(), CvType.CV_8UC3);
 */
 		Mat src = new Mat();
-    	Mat gray = new Mat(mat.height(),mat.width(),CvType.CV_8UC3);
+    	Mat gray = new Mat();
     	Mat bw = new Mat();
     	Mat dest = new Mat();
 
-    	Imgproc.cvtColor(mat, gray, Imgproc.COLOR_RGB2XYZ);
-    	//gray = ImageUtils.convert2GrayScale(mat);
-    	Imgproc.blur(gray, bw, new Size(5,5));
-    	Imgproc.Canny(gray, bw, 80, 240);
+    	dest = ImageUtils.convert2GrayScale(mat);
+    	EdgeDetectorAlgo edgeDetectorAlgo = new EdgeDetectorAlgo(mat);
+    	dest = edgeDetectorAlgo.detectEdge();
+
+    	//Imgproc.cvtColor(mat, gray, Imgproc.COLOR_RGB2GRAY);
+    	//Imgproc.blur(gray, bw, new Size(3,3));
+    	//Imgproc.Canny(gray, bw, 80, 240);
     	//Imgproc.Canny(grey, bw, 80, 80);
-    	/*EdgeDetectorAlgo edgeDetectorAlgo = new EdgeDetectorAlgo(mat);
-    	dest = edgeDetectorAlgo.detectEdge();*/
       
     	/**
     	 * find the contours
     	 * 
     	 */
-    	/*List<MatOfPoint> contours = new ArrayList<>();
+    	List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
     	Mat hierarchy = new Mat();
-    	Imgproc.findContours(bw.clone(), contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);*/
+    	dest.convertTo(dest, CvType.CV_8UC1);
+    	Imgproc.findContours(dest.clone(), contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
     	//mat.copyTo(dest);
     	
     	//getSpace(dest);
     	
     	//byte[] dat = new byte[bw.rows() * bw.cols() * (int) (bw.elemSize())];
-    	byte[] dat = new byte[bw.rows() * bw.cols() * 3 ];
+    	byte[] dat = new byte[dest.rows() * dest.cols() * 3 ];
     	
-    	bw.get(0, 0, dat);
+    	dest.get(0, 0, dat);
         //img.getRaster().setDataElements(0, 0, dest.width(), dest.height(), dat);
 		 
-		BufferedImage image = new BufferedImage(bw.cols(), bw.rows(), BufferedImage.TYPE_3BYTE_BGR);;
-        image.getRaster().setDataElements(0, 0, bw.cols(), bw.rows(), dat);
+    	for (int i = 0; i < contours.size(); i++){
+    		System.out.println(i+"\n"+contours.get(i).dump());
+    		// Approximate contour with accuracy proportional
+    		// to the contour perimeter
+    		//Imgproc.ap
+    	}
+
+    	BufferedImage image = new BufferedImage(dest.cols(), dest.rows(), BufferedImage.TYPE_3BYTE_BGR);;
+        image.getRaster().setDataElements(0, 0, dest.cols(), dest.rows(), dat);
+        
         return image;
 	}
 }

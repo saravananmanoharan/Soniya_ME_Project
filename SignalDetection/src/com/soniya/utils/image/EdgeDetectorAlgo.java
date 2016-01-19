@@ -31,7 +31,7 @@ public class EdgeDetectorAlgo {
 	}
 
 	public Mat detectEdge() {
-		Mat edgeDetectedImage = new Mat(width, height, CvType.CV_8UC1);
+		Mat edgeDetectedImage = new Mat(width, height, CvType.CV_8UC3);
 		for (int y = 1; y < height - 1; y++) {
 			for (int x = 1; x < width - 1; x++) {
 
@@ -53,7 +53,8 @@ public class EdgeDetectorAlgo {
 				}
 
 				//find the magitude
-				int magnitude = 255 - truncate((int) Math.sqrt(gray1 * gray1 + gray2 * gray2));
+				//int magnitude = 255 - truncate((int) Math.sqrt(gray1 * gray1 + gray2 * gray2));
+				int magnitude = truncate((int) Math.sqrt(gray1 * gray1 + gray2 * gray2));
 
 				edgeDetectedImage.put(x, y, new double[]{magnitude,magnitude,magnitude});
 			}
