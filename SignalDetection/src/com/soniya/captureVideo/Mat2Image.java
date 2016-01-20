@@ -68,6 +68,7 @@ public class Mat2Image {
     	EdgeDetectorAlgo edgeDetectorAlgo = new EdgeDetectorAlgo(mat);
     	dest = edgeDetectorAlgo.detectEdge();
 
+    	//dest = detectShape(edgeDetectorAlgo.detectEdge());
     	//Imgproc.cvtColor(mat, gray, Imgproc.COLOR_RGB2GRAY);
     	//Imgproc.blur(gray, bw, new Size(3,3));
     	//Imgproc.Canny(gray, bw, 80, 240);
@@ -77,30 +78,37 @@ public class Mat2Image {
     	 * find the contours
     	 * 
     	 */
-    	List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
-    	Mat hierarchy = new Mat();
-    	dest.convertTo(dest, CvType.CV_8UC1);
-    	Imgproc.findContours(dest.clone(), contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-    	//mat.copyTo(dest);
+//    	List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+//    	Mat hierarchy = new Mat();
+//    	dest.convertTo(dest, CvType.CV_8UC1);
+//    	Imgproc.findContours(dest.clone(), contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+      	//mat.copyTo(dest);
     	
     	//getSpace(dest);
     	
     	//byte[] dat = new byte[bw.rows() * bw.cols() * (int) (bw.elemSize())];
-    	byte[] dat = new byte[dest.rows() * dest.cols() * 3 ];
-    	
-    	dest.get(0, 0, dat);
         //img.getRaster().setDataElements(0, 0, dest.width(), dest.height(), dat);
 		 
-    	for (int i = 0; i < contours.size(); i++){
+    	/*for (int i = 0; i < contours.size(); i++){
     		System.out.println(i+"\n"+contours.get(i).dump());
     		// Approximate contour with accuracy proportional
     		// to the contour perimeter
     		//Imgproc.ap
-    	}
+    	}*/
+
+    	byte[] dat = new byte[dest.rows() * dest.cols() * 3 ];
+    	dest.get(0, 0, dat);
 
     	BufferedImage image = new BufferedImage(dest.cols(), dest.rows(), BufferedImage.TYPE_3BYTE_BGR);;
         image.getRaster().setDataElements(0, 0, dest.cols(), dest.rows(), dat);
         
         return image;
+	}
+
+	private Mat detectShape(Mat detectEdge) {
+		Mat shapeDetect = detectEdge.clone();
+
+		System.out.println(shapeDetect.dump());
+		return shapeDetect;
 	}
 }
